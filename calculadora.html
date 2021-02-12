@@ -19,6 +19,7 @@
             height: 25px;
             border-width: 3px;
             margin: 0px 0px 8px 0px;
+            text-align: right;
         }
         button {
             width: 30px;
@@ -40,28 +41,48 @@
     <div class="container">
         <input type="text" name="display" id="display" />
         <br/>
-        <button name="borrar" id="borrar">AC</button>
-        <button name="del" id="del">Del</button>
+        <button name="borrar" id="borrar" onclick="borrar()">AC</button>
+        <button name="del" id="del" onclick="del()">Del</button>
         <br/>
-        <button class="numero" name="siete" id="siete">7</button>
-        <button class="numero"name="ocho" id="ocho">8</button>
-        <button class="numero"name="nueve" id="nueve">9</button>
-        <button name="division" id="division">/</button>
+        <button class="numero" name="siete" id="siete" onclick="clickBoton(7)">7</button>
+        <button class="numero"name="ocho" id="ocho" onclick="clickBoton(8)">8</button>
+        <button class="numero"name="nueve" id="nueve" onclick="clickBoton(9)">9</button>
+        <button name="division" id="division" onclick="clickBoton('/')">/</button>
         <br/>
-        <button class="numero"name="cuatro" id="cuatro">4</button>
-        <button class="numero"name="cinco" id="cinco">5</button>
-        <button class="numero"name="seis" id="seis">6</button>
-        <button name="multiplicacion" id="multiplicacion">*</button>
+        <button class="numero"name="cuatro" id="cuatro" onclick="clickBoton(4)">4</button>
+        <button class="numero"name="cinco" id="cinco" onclick="clickBoton(5)">5</button>
+        <button class="numero"name="seis" id="seis" onclick="clickBoton(6)">6</button>
+        <button name="multiplicacion" id="multiplicacion" onclick="clickBoton('*')">*</button>
         <br/>
-        <button class="numero"name="uno" id="uno">1</button>
-        <button class="numero"name="dos" id="dos">2</button>
-        <button class="numero"name="tres" id="tres">3</button>
-        <button name="menos" id="menos">-</button>
+        <button class="numero"name="uno" id="uno" onclick="clickBoton(1)">1</button>
+        <button class="numero"name="dos" id="dos" onclick="clickBoton(2)">2</button>
+        <button class="numero"name="tres" id="tres" onclick="clickBoton(3)">3</button>
+        <button name="menos" id="menos" onclick="clickBoton('-')">-</button>
         <br/>
-        <button class="operador"name="punto" id="punto">.</button>
-        <button class="numero"name="cero" id="cero">0</button>
-        <button name="igual" id="igual">=</button>
-        <button name="mas" id="mas">+</button>
+        <button class="operador"name="punto" id="punto"  onclick="clickBoton('.')">.</button>
+        <button class="numero"name="cero" id="cero" onclick="clickBoton(0)">0</button>
+        <button name="igual" id="igual" onclick="resultado()">=</button>
+        <button name="mas" id="mas" onclick="clickBoton('+')">+</button>
     </div>
 </body>
+<script>
+    function resultado() {
+      let input = document.getElementById("display").value;
+      document.getElementById("display").value = eval(input)
+    }
+    
+    function clickBoton(boton) {
+      let input = document.getElementById("display").value;
+      document.getElementById("display").value += boton;
+    }
+
+    function borrar() {
+      document.getElementById("display").value = ""
+    }
+
+    function del(){
+      let input = document.getElementById("display").value 
+      document.getElementById("display").value = input.slice(0, -1)
+    }
+</script>
 </html>
