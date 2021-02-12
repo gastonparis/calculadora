@@ -73,7 +73,7 @@
       let resultado = eval(input);
       document.getElementById("display").value = resultado;
       archivo(input, resultado);
-      console.log(tiraPapel)
+      console.log(tiraPapel);
     }
     
     function clickBoton(boton) {
@@ -92,13 +92,19 @@
 
     function archivo(input, resultado) {
       if (resultado != undefined) {
-        tiraPapel = {"nroOrden": nroOrden, 
-                        "linea": {"input": input, 
-                              "resultado": resultado
-                              }
-                  }
+        tiraPapel.push({"input": input, 
+                       "resultado": resultado
+                      });
+                  };
+      if (tiraPapel.length > 10) {
+        tiraPapel = borrarPrimerElemento(tiraPapel);
+      };
       }
-      nroOrden += 1
+    
+    function borrarPrimerElemento(elementos) {
+      elementos.shift();
+      console.log(elementos)
+      return elementos
     }
 </script>
 </html>
