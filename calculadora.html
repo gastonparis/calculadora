@@ -5,15 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Calculadora</title>
     <style>
-        .container {
+        .containerCalcu {
+            float: left;
             background-color: black;
             padding: 18px;
             border-radius: 4px;
             width: 170px;
-            /* border-color: black; */
-            /* border-width: 5px; */
             box-sizing: border-box;
         }
+
+        .containerPapel {
+          float: left;
+          background-color: rgba(216, 214, 207, 0.918);
+          width: 50%;
+          padding: 18px;
+          box-sizing: border-box;
+        }
+
         input {
             width: 123px;
             height: 25px;
@@ -26,10 +34,12 @@
             height: 30px;
             border-radius: 4px;
             margin: 0px 0px 4px 0px;
-            background-color: rgb(45, 239, 253);
+            color: rgb(189, 188, 188);
+            background-color: rgb(70, 38, 38);
         }
         .numero {
-            background-color: aquamarine;
+            color: white;
+            background-color: rgb(34, 21, 21);
         }
 
     </style>
@@ -37,8 +47,7 @@
 
 <body>
     <h2>Pimera versión de la calculadora</h2>
-    <hr>
-    <div class="container">
+    <div class="containerCalcu">
         <input type="text" name="display" id="display" />
         <br/>
         <button name="borrar" id="borrar" onclick="borrar()">AC</button>
@@ -64,6 +73,19 @@
         <button name="igual" id="igual" onclick="resultado()">=</button>
         <button name="mas" id="mas" onclick="clickBoton('+')">+</button>
     </div>
+
+    <div class="containerPapel">
+        <p id="primera"></p>
+        <p id="segunda"></p>
+        <p id="tercera"></p>
+        <p id="cuarta"></p>
+        <p id="quinta"></p>
+        <p id="sexta"></p>
+        <p id="septima"></p>
+        <p id="octava"></p>
+        <p id="novena"></p>
+        <p id="decima"></p>
+    </div>
 </body>
 <script>
     var nroOrden = 0
@@ -73,6 +95,7 @@
       let resultado = eval(input);
       document.getElementById("display").value = resultado;
       archivo(input, resultado);
+      imprimirPapel();
       console.log(tiraPapel);
     }
     
@@ -92,9 +115,7 @@
 
     function archivo(input, resultado) {
       if (resultado != undefined) {
-        tiraPapel.push({"input": input, 
-                       "resultado": resultado
-                      });
+        tiraPapel.push(input + ' = ' + resultado);
                   };
       if (tiraPapel.length > 10) {
         tiraPapel = borrarPrimerElemento(tiraPapel);
@@ -106,5 +127,14 @@
       console.log(elementos)
       return elementos
     }
+
+    function imprimirPapel() {
+      var i
+      let posiciones = ["primera", "segunda", "tercera", "cuarta", "quinta", "sexta", "septima", "octava", "novena", "decima"]
+      for (i = 0; i < tiraPapel.length; i++) {
+        document.getElementById(posiciones[i]).innerHTML = tiraPapel[i];
+      }      
+    }
+
 </script>
 </html>
