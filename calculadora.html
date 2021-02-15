@@ -74,29 +74,19 @@
         <button name="mas" id="mas" onclick="clickBoton('+')">+</button>
     </div>
 
-    <div class="containerPapel">
-        <p id="primera"></p>
-        <p id="segunda"></p>
-        <p id="tercera"></p>
-        <p id="cuarta"></p>
-        <p id="quinta"></p>
-        <p id="sexta"></p>
-        <p id="septima"></p>
-        <p id="octava"></p>
-        <p id="novena"></p>
-        <p id="decima"></p>
+    <div class="containerPapel" id="containerPapel">
+
     </div>
 </body>
 <script>
-    var nroOrden = 0
-    var tiraPapel = []
+    var tiraPapel = [];
+
     function resultado() {
       let input = document.getElementById("display").value;
       let resultado = eval(input);
       document.getElementById("display").value = resultado;
       archivo(input, resultado);
       imprimirPapel();
-      console.log(tiraPapel);
     }
     
     function clickBoton(boton) {
@@ -105,36 +95,43 @@
     }
 
     function borrar() {
-      document.getElementById("display").value = ""
+      document.getElementById("display").value = "";
     }
 
     function del(){
-      let input = document.getElementById("display").value 
-      document.getElementById("display").value = input.slice(0, -1)
+      let input = document.getElementById("display").value; 
+      document.getElementById("display").value = input.slice(0, -1);
     }
 
     function archivo(input, resultado) {
       if (resultado != undefined) {
         tiraPapel.push(input + ' = ' + resultado);
-                  };
+                  }
       if (tiraPapel.length > 10) {
         tiraPapel = borrarPrimerElemento(tiraPapel);
-      };
+                  }
       }
     
     function borrarPrimerElemento(elementos) {
       elementos.shift();
-      console.log(elementos)
+      console.log(elementos);
       return elementos
     }
 
     function imprimirPapel() {
-      var i
-      let posiciones = ["primera", "segunda", "tercera", "cuarta", "quinta", "sexta", "septima", "octava", "novena", "decima"]
-      for (i = 0; i < tiraPapel.length; i++) {
-        document.getElementById(posiciones[i]).innerHTML = tiraPapel[i];
-      }      
-    }
+        const codigo = constructorCodigo();
+        document.getElementById("containerPapel").innerHTML = codigo;
+    }      
 
+    function constructorCodigo () {
+      var i;
+      var codigo = '';
+      for (i = 0; i < tiraPapel.length; i++) {
+        var linea = `<p id="posicion_${i}">${tiraPapel[i]}</p>`;
+        codigo += linea;
+        console.log(codigo);
+      }
+      return codigo
+    }
 </script>
 </html>
