@@ -84,8 +84,7 @@
     function clickOperador (boton) {
       const operadores = ['+', '-', '*', '/'];
       let input = document.getElementById("display").value;
-      console.log(typeof(input.slice(-1,)));
-      if (input.slice(-1,).toString().indexOf(operadores) != -1) {
+      if (operadores.indexOf(input.slice(-1,)) != -1) {
         console.log(input);
         document.getElementById("display").value = input.slice(0, -1);
         }
@@ -140,7 +139,6 @@
       for (i = 0; i < tiraPapel.length; i++) {
         var linea = `<p id="posicion_${i}">${tiraPapel[i]}</p>`;
         codigo += linea;
-        console.log(codigo);
       }
       return codigo
     }
