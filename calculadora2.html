@@ -3,7 +3,7 @@
     <meta charset=UTF8>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Calculadora</title>
+    <title>Calculadora2</title>
     <style>
         .containerCalcu {
             float: left;
@@ -42,7 +42,6 @@
             color: white;
             background-color: rgb(34, 21, 21);
         }
-
     </style>
 </head>
 
@@ -79,8 +78,59 @@
 
     </div>
 </body>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-database.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
 <script>
-    var tiraPapel = [];
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyA8mFJP6XWhxYC5b_wSwsMbYQck_wHWjDo",
+    authDomain: "calculadora-c6d1f.firebaseapp.com",
+    projectId: "calculadora-c6d1f",
+    storageBucket: "calculadora-c6d1f.appspot.com",
+    messagingSenderId: "882449623031",
+    appId: "1:882449623031:web:b01a6b398304004c9330f2"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+
+<script>
+
+    //var tiraPapel;
+
+    var database = firebase.database();
+
+    function escribirDatos(usuario, input, resultado) {
+        console.log('escribiendo');
+        id = Date.now();
+        const databaseRef = firebase.database().ref();
+        databaseRef.child(usuario).child(id).set({
+        input: input,
+        resultado: resultado,
+    });
+        return id;
+    }
+
+    function readUserData (usuario) {
+        const databaseRefChild = database.ref().child(usuario);
+        databaseRefChild.get().then(function(snapshot) {
+            if (snapshot.exists()) {
+                datos = snapshot.val();
+                console.log(datos);
+                imprimirPapel(datos);
+                }
+            else {
+                console.log("No data available");
+                }
+            }).catch(function(error) {
+                console.error(error);
+            });
+        }
 
     function clickOperador (boton) {
       const operadores = ['+', '-', '*', '/'];
@@ -96,8 +146,11 @@
       let input = document.getElementById("display").value;
       let resultado = eval(input);
       document.getElementById("display").value = resultado;
-      archivo(input, resultado);
-      imprimirPapel();
+      escribirDatos('gaston', input, resultado);
+      readUserData('gaston');
+      //console.log(tiraPapel);
+      //archivo(input, resultado);
+      //imprimirPapel(datos);
      }
     
     function clickBoton(boton) {
@@ -129,19 +182,22 @@
       return elementos
     }
 
-    function imprimirPapel() {
-        const codigo = bloqueCodigo();
+    function imprimirPapel(datos) {
+        codigo = bloqueCodigo(datos);
+        console.log(codigo);
         document.getElementById("containerPapel").innerHTML = codigo;
     }      
 
-    function bloqueCodigo () {
-      var i;
-      var codigo = '';
-      for (i = 0; i < tiraPapel.length; i++) {
-        var linea = `<p id="posicion_${i}">${tiraPapel[i]}</p>`;
-        codigo += linea;
-      }
-      return codigo
+    function bloqueCodigo (snapshot) {
+        console.log(snapshot)
+        var codigo = '';
+        for (let id in snapshot) {
+            console.log(snapshot[id]['input'], snapshot[id]['resultado']);
+            var linea = `<p id="posicion_${id}">${snapshot[id]['input']} = ${snapshot[id]['resultado']}</p>`;
+            codigo += linea;
+        }
+        return codigo
     }
 </script>
+
 </html>
