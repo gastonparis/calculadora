@@ -4,7 +4,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Calculadora2</title>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
     <style>
+        .containerLoginButton {
+            width: 610px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            /* margin-left: auto; */
+            /* box-sizing: border-box; */
+        }
         .containerCalcu {
             float: left;
             background-color: black;
@@ -17,7 +27,7 @@
         .containerPapel {
           float: left;
           background-color: rgba(216, 214, 207, 0.918);
-          width: 50%;
+          width: 400px;
           padding: 18px;
           box-sizing: border-box;
         }
@@ -42,11 +52,110 @@
             color: white;
             background-color: rgb(34, 21, 21);
         }
+        /* The Modal (background) */
+        .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+        background-color: #fefefe;
+        margin: 5px auto; /* 15% from the top and centered */
+        border: 1px solid #888;
+        width: 50%; /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button */
+        .close {
+        /* Position it in the top right corner outside of the modal */
+        position: absolute;
+        right: 25px;
+        top: 0;
+        color: #000;
+        font-size: 35px;
+        font-weight: bold;
+        }
+
+        /* Close button on hover */
+        .close:hover,
+        .close:focus {
+        color: red;
+        cursor: pointer;
+        }
+
+        /* Add Zoom Animation */
+        .animate {
+        -webkit-animation: animatezoom 0.6s;
+        animation: animatezoom 0.6s
+        }
+
+        .containerLogin {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        }
+        
+        .containerLogin input[type="text"], input[type=password] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        /* display: inline-block; */
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        /* vertical-align: middle; */
+        }
+
+        .login-button {
+        width: 100px;
+        height: 40px;
+        margin: 0px 0px 4px 0px;
+        color: rgb(189, 188, 188);
+        background-color: rgb(21, 117, 18);
+        /* text-align: center; */
+        }
+        
+        button[type="submit"] {
+        color:rgb(239, 243, 239);
+        background-color: rgb(21, 117, 18);
+        width: 100%;
+        }
+
+        input[type="checkbox"] {
+        text-align: left;
+        
+        }
+
+        @-webkit-keyframes animatezoom {
+        from {-webkit-transform: scale(0)}
+        to {-webkit-transform: scale(1)}
+        }
+
+        @keyframes animatezoom {
+        from {transform: scale(0)}
+        to {transform: scale(1)}
+        }
     </style>
 </head>
 
 <body>
-    <h2>Pimera versión de la calculadora</h2>
+    <div>
+    <h2>Segunda versión de la calculadora</h2>
+    </div>
+    <div class="containerLoginButton">
+    <!-- Button to open the modal login form -->
+    <button class="login-button" onclick="document.getElementById('id01').style.display='block'">Entrar</button>
+    </div>
     <div class="containerCalcu">
         <input type="text" name="display" id="display" minlength="4" maxlength="8" size="10" required >
         <br/>
@@ -73,35 +182,70 @@
         <button name="igual" id="igual" onclick="resultado()">=</button>
         <button name="mas" id="mas" onclick="clickOperador('+')">+</button>
     </div>
-
+    <div>
+    <label>Ultimos resultados</label>
+    <select name="ultimosresultados" id="ultimosresultados">
+        <option value="0">Todos</option>
+        <option value="86400000">Día</option>
+        <option value="3600000">Hora</option>
+        <option value="600000">10 min</option>
+    </select> <br>
+    </div>
     <div class="containerPapel" id="containerPapel">
-
+       
+    </div>
+<!-- The Modal -->
+    <div id="id01" class="modal">
+        <span onclick="document.getElementById('id01').style.display='none'"
+    class="close" title="Close Modal">&times;</span>
+    
+        <!-- Modal Content -->
+        <form class="modal-content animate" action="/action_page.php">
+        <!-- <div class="imgcontainer">
+            <img src="img_avatar2.png" alt="Avatar" class="avatar">
+        </div>*/ -->
+    
+        <div class="containerLogin">
+            <label for="uname"><b>Correo electrónico</b></label>
+            <input type="text" placeholder="Ingresar correo electrónico" name="uname" required>
+    
+            <label for="psw"><b>Contraseña</b></label>
+            <input type="password" placeholder="Ingresar contraseña" name="psw" required>
+    
+            <button type="submit">Login</button>
+            <label>
+            <input type="checkbox" checked="checked" name="remember"> Recordarme
+            </label>
+        </div>
+    
+        <div class="container" style="background-color:#f1f1f1">
+            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+            <span class="psw">Forgot <a href="#">password?</a></span>
+        </div>
+        </form>
     </div>
 </body>
-<!-- The core Firebase JS SDK is always required and must be listed first -->
+</-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
 
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-
-<script>
-  // Your web app's Firebase configuration
-  var firebaseConfig = {
-    apiKey: "AIzaSyA8mFJP6XWhxYC5b_wSwsMbYQck_wHWjDo",
-    authDomain: "calculadora-c6d1f.firebaseapp.com",
-    projectId: "calculadora-c6d1f",
-    storageBucket: "calculadora-c6d1f.appspot.com",
-    messagingSenderId: "882449623031",
-    appId: "1:882449623031:web:b01a6b398304004c9330f2"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-</script>
+<script src="./app.js"></script>
 
 <script>
+    firebase.initializeApp(firebaseConfig);
+    /*ui.start('#firebaseui-auth-container', {
+    signInOptions: [
+    firebase.auth.EmailAuthProvider.PROVIDER_ID
+    ],
+    // Other config options...
+    });
+    const selectElement = document.getElementById('ultimosresultados');
 
-    //var tiraPapel;
+    selectElement.addEventListener('change', (event) => {
+        readUserData('gaston')
+    });*/
+
 
     var database = firebase.database();
 
@@ -118,25 +262,18 @@
 
     function readUserData (usuario) {
         const databaseRefChild = database.ref().child(usuario);
-        databaseRefChild.get().then(function(snapshot) {
-            if (snapshot.exists()) {
-                datos = snapshot.val();
-                console.log(datos);
-                imprimirPapel(datos);
-                }
-            else {
-                console.log("No data available");
-                }
-            }).catch(function(error) {
-                console.error(error);
-            });
-        }
-
+        databaseRefChild.on('value', (snapshot) => {
+            const data = snapshot.val();
+            console.log('retorno de firebase:', data);
+            imprimirPapel(data);
+        });
+    }
+</script>
+<script>
     function clickOperador (boton) {
       const operadores = ['+', '-', '*', '/'];
       let input = document.getElementById("display").value;
       if (operadores.indexOf(input.slice(-1,)) != -1) {
-        console.log(input);
         document.getElementById("display").value = input.slice(0, -1);
         }
       clickBoton(boton);
@@ -148,9 +285,6 @@
       document.getElementById("display").value = resultado;
       escribirDatos('gaston', input, resultado);
       readUserData('gaston');
-      //console.log(tiraPapel);
-      //archivo(input, resultado);
-      //imprimirPapel(datos);
      }
     
     function clickBoton(boton) {
@@ -167,35 +301,30 @@
       document.getElementById("display").value = input.slice(0, -1);
     }
 
-    function archivo(input, resultado) {
-      if (resultado != undefined) {
-        tiraPapel.push(input + ' = ' + resultado);
-                  }
-      if (tiraPapel.length > 10) {
-        tiraPapel = borrarPrimerElemento(tiraPapel);
-                  }
-      }
-    
-    function borrarPrimerElemento(elementos) {
-      elementos.shift();
-      console.log(elementos);
-      return elementos
+    function ultimosResultados () {
+        let periodo = document.getElementById("ultimosresultados").value;
+        if (periodo == "0") {
+            periodo = Date.now();
+        }
+        console.log('umbral de tiempo:', periodo);
+        return Date.now() - parseInt(periodo)
     }
 
     function imprimirPapel(datos) {
         codigo = bloqueCodigo(datos);
-        console.log(codigo);
         document.getElementById("containerPapel").innerHTML = codigo;
     }      
 
     function bloqueCodigo (snapshot) {
-        console.log(snapshot)
         var codigo = '';
+        const umbraldetiempo = ultimosResultados();
         for (let id in snapshot) {
-            console.log(snapshot[id]['input'], snapshot[id]['resultado']);
-            var linea = `<p id="posicion_${id}">${snapshot[id]['input']} = ${snapshot[id]['resultado']}</p>`;
-            codigo += linea;
-        }
+            console.log(id);
+            if (parseInt(id) < umbraldetiempo) { continue;}
+                console.log(snapshot[id]['input'], snapshot[id]['resultado']);
+                var linea = `<p id="posicion_${id}">${snapshot[id]['input']} = ${snapshot[id]['resultado']}</p>`;
+                codigo += linea;
+            } 
         return codigo
     }
 </script>
