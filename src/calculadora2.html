@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Calculadora2</title>
     <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
+    
+    
     <style>
         .containerLoginButton {
             width: 610px;
@@ -106,14 +108,19 @@
         align-items: flex-start;
         }
         
+        .containerCancel {
+        padding: 0px 12px 0px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        }
+
         .containerLogin input[type="text"], input[type=password] {
         width: 100%;
         padding: 12px 20px;
         margin: 8px 0;
-        /* display: inline-block; */
         border: 1px solid #ccc;
         box-sizing: border-box;
-        /* vertical-align: middle; */
         }
 
         .login-button {
@@ -125,15 +132,32 @@
         /* text-align: center; */
         }
         
+        .containerButton {
+        display:flex;
+        justify-content: space-between;
+        width: 30%;
+        }
+
         button[type="submit"] {
         color:rgb(239, 243, 239);
         background-color: rgb(21, 117, 18);
-        width: 100%;
+        /*flex-direction: row;*/
+        /*justify-content: space-between;*/
+        width: 90px
         }
 
         input[type="checkbox"] {
-        text-align: left;
-        
+        padding: 0px 10px 0px 0px;
+        width: 0px;
+        align-items: center;       
+        }
+
+        button[type="button"] {
+        width: 80px;
+        height: 40px;
+        margin: 0px 0px 4px 0px;
+        color: rgb(189, 188, 188);
+        background-color: rgb(21, 117, 18);
         }
 
         @-webkit-keyframes animatezoom {
@@ -186,9 +210,9 @@
     <label>Ultimos resultados</label>
     <select name="ultimosresultados" id="ultimosresultados">
         <option value="0">Todos</option>
-        <option value="86400000">Día</option>
-        <option value="3600000">Hora</option>
-        <option value="600000">10 min</option>
+        <option value="86400000">Último día</option>
+        <option value="3600000">Última hora</option>
+        <option value="600000">Últimos 10 min</option>
     </select> <br>
     </div>
     <div class="containerPapel" id="containerPapel">
@@ -200,27 +224,29 @@
     class="close" title="Close Modal">&times;</span>
     
         <!-- Modal Content -->
-        <form class="modal-content animate" action="/action_page.php">
+        <form class="modal-content animate"> <!-- action="/action_page.php">
         <!-- <div class="imgcontainer">
             <img src="img_avatar2.png" alt="Avatar" class="avatar">
         </div>*/ -->
     
         <div class="containerLogin">
             <label for="uname"><b>Correo electrónico</b></label>
-            <input type="text" placeholder="Ingresar correo electrónico" name="uname" required>
+            <input type="text" id="email" placeholder="Ingresar correo electrónico" name="uname" required>
     
             <label for="psw"><b>Contraseña</b></label>
-            <input type="password" placeholder="Ingresar contraseña" name="psw" required>
-    
-            <button type="submit">Login</button>
+            <input type="password" id="password" placeholder="Ingresar contraseña" name="psw" required>
+            <div class="containerButton">
+                <button type="button" id="ingresar">Ingresar</button>
+                <button type="button" id="registrarse">Registrarse</button>
+            </div>
             <label>
-            <input type="checkbox" checked="checked" name="remember"> Recordarme
+                <input type="checkbox" checked="checked" name="remember"> Recordarme
             </label>
         </div>
     
-        <div class="container" style="background-color:#f1f1f1">
-            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-            <span class="psw">Forgot <a href="#">password?</a></span>
+        <div class="containerCancel" style="background-color:#f1f1f1">
+            <button type="button" onclick="document.getElementById('id01').style.display='none'">Cancelar</button>
+            <span class="psw">recuperar <a href="#">contraseña</a></span>
         </div>
         </form>
     </div>
@@ -229,10 +255,12 @@
 <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
 
-<script src="./app.js"></script>
+<script src="./js/app.js"></script>
 
 <script>
+
     firebase.initializeApp(firebaseConfig);
     /*ui.start('#firebaseui-auth-container', {
     signInOptions: [
@@ -269,7 +297,140 @@
         });
     }
 </script>
+<script type="text/javascript">
+
+  /**
+   * Handles the sign in button press.
+   */
+  function toggleSignIn() {
+    if (firebase.auth().currentUser) {
+      firebase.auth().signOut();
+    } else {
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
+      if (email.length < 4) {
+        alert('Please enter an email address.');
+        return;
+      }
+      if (password.length < 4) {
+        alert('Please enter a password.');
+        return;
+      }
+      // Sign in with email and pass.
+      firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        if (errorCode === 'auth/wrong-password') {
+          alert('Wrong password.');
+        } else {
+          alert(errorMessage);
+        }
+        console.log(error);
+        document.getElementById('ingresar').disabled = false;
+      });
+    }
+    document.getElementById('ingresar').disabled = true;
+  }
+
+  /**
+   * Handles the sign up button press.
+   */
+  function handleSignUp() {
+    var email = document.getElementById('email').value;
+    console.log(email)
+    var password = document.getElementById('password').value;
+    if (email.length < 4) {
+      alert('Please enter an email address.');
+      return;
+    }
+    if (password.length < 4) {
+      alert('Please enter a password.');
+      return;
+    }
+    // Create user with email and pass.
+    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      if (errorCode == 'auth/weak-password') {
+        alert('The password is too weak.');
+      } else {
+        alert(errorMessage);
+      }
+      console.log(error);
+    });
+  }
+
+  /**
+   * Sends an email verification to the user.
+   */
+  function sendEmailVerification() {
+    firebase.auth().currentUser.sendEmailVerification().then(function() {
+      // Email Verification sent!
+      alert('Email Verification Sent!');
+    });
+  }
+
+  function sendPasswordReset() {
+    var email = document.getElementById('email').value;
+    firebase.auth().sendPasswordResetEmail(email).then(function() {
+      // Password Reset Email Sent!
+      alert('Password Reset Email Sent!');
+    }).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      if (errorCode == 'auth/invalid-email') {
+        alert(errorMessage);
+      } else if (errorCode == 'auth/user-not-found') {
+        alert(errorMessage);
+      }
+      console.log(error);
+    });
+  }
+
+  /**
+   * initApp handles setting up UI event listeners and registering Firebase auth listeners:
+   *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
+   *    out, and that is where we update the UI.
+   */
+  function initApp() {
+    // Listening for auth state changes.
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+        console.log(user.email);
+        var emailVerified = user.emailVerified;
+        
+        localStorage.setItem('userLoggedIn', user.uid);
+        readUserData(user.uid);
+        var uid = user.uid;
+        document.getElementById('ingresar').textContent = 'Salir';
+
+        if (!emailVerified) {
+
+        }
+      } else {
+        // User is signed out.
+        localStorage.clear();
+        document.getElementById('ingresar').textContent = 'Ingresar';
+
+      }
+      document.getElementById('ingresar').disabled = false;
+    });
+
+    document.getElementById('ingresar').addEventListener('click', toggleSignIn, false);
+    document.getElementById('registrarse').addEventListener('click', handleSignUp, false);
+  }
+
+  window.onload = function() {
+    initApp();
+  };
+</script>
+
 <script>
+    
     function clickOperador (boton) {
       const operadores = ['+', '-', '*', '/'];
       let input = document.getElementById("display").value;
@@ -283,8 +444,9 @@
       let input = document.getElementById("display").value;
       let resultado = eval(input);
       document.getElementById("display").value = resultado;
-      escribirDatos('gaston', input, resultado);
-      readUserData('gaston');
+      let uid = localStorage.getItem('userLoggedIn');
+      escribirDatos(uid, input, resultado);
+      readUserData(uid);
      }
     
     function clickBoton(boton) {
