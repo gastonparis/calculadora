@@ -160,6 +160,11 @@
         background-color: rgb(21, 117, 18);
         }
 
+        button[type="button"][class="recuperar"] {
+        width: 100px;
+        justify-content: center;
+        }
+
         @-webkit-keyframes animatezoom {
         from {-webkit-transform: scale(0)}
         to {-webkit-transform: scale(1)}
@@ -178,7 +183,7 @@
     </div>
     <div class="containerLoginButton">
     <!-- Button to open the modal login form -->
-    <button class="login-button" onclick="document.getElementById('id01').style.display='block'">Entrar</button>
+    <button class="login-button" id="entrar" onclick="toggleEntrar(true)">Entrar</button>
     </div>
     <div class="containerCalcu">
         <input type="text" name="display" id="display" minlength="4" maxlength="8" size="10" required >
@@ -246,7 +251,7 @@
     
         <div class="containerCancel" style="background-color:#f1f1f1">
             <button type="button" onclick="document.getElementById('id01').style.display='none'">Cancelar</button>
-            <span class="psw">recuperar <a href="#">contraseña</a></span>
+            <button type="button" class="recuperar" id="recuperar-contraseña">Recuperar contraseña</button>
         </div>
         </form>
     </div>
@@ -298,22 +303,30 @@
     }
 </script>
 <script type="text/javascript">
-
+  function toggleEntrar() {
+    if (firebase.auth().currentUser) {
+      toggleSingIn(false);
+    } else {
+      document.getElementById('id01').style.display='block';
+    }
+  }
   /**
    * Handles the sign in button press.
    */
   function toggleSignIn() {
     if (firebase.auth().currentUser) {
       firebase.auth().signOut();
+      document.getElementById("containerPapel").innerHTML = '';
+      document.getElementById('entrar').textContent = 'Entrar';
     } else {
       var email = document.getElementById('email').value;
       var password = document.getElementById('password').value;
       if (email.length < 4) {
-        alert('Please enter an email address.');
+        alert('Por favor ingrese una dirección de correo electrónico válida.');
         return;
       }
       if (password.length < 4) {
-        alert('Please enter a password.');
+        alert('Por favor ingrese una contraseña válida.');
         return;
       }
       // Sign in with email and pass.
@@ -322,7 +335,7 @@
         var errorCode = error.code;
         var errorMessage = error.message;
         if (errorCode === 'auth/wrong-password') {
-          alert('Wrong password.');
+          alert('Contraseña incorrecta.');
         } else {
           alert(errorMessage);
         }
@@ -341,7 +354,7 @@
     console.log(email)
     var password = document.getElementById('password').value;
     if (email.length < 4) {
-      alert('Please enter an email address.');
+      alert('Por favor ingrese una dirección de correo electrónico válida.');
       return;
     }
     if (password.length < 4) {
@@ -354,12 +367,14 @@
       var errorCode = error.code;
       var errorMessage = error.message;
       if (errorCode == 'auth/weak-password') {
-        alert('The password is too weak.');
+        alert('La contraseña es debil.');
       } else {
         alert(errorMessage);
       }
       console.log(error);
     });
+    document.getElementById('id01').style.display='none';
+    alert('Correctamente registrado! Puede comenzar a utilizar la calculadora')
   }
 
   /**
@@ -400,6 +415,7 @@
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.
+        console.log(user);
         console.log(user.email);
         var emailVerified = user.emailVerified;
         
@@ -407,6 +423,7 @@
         readUserData(user.uid);
         var uid = user.uid;
         document.getElementById('ingresar').textContent = 'Salir';
+        document.getElementById('entrar').textContent = 'Salir';
 
         if (!emailVerified) {
 
@@ -422,6 +439,7 @@
 
     document.getElementById('ingresar').addEventListener('click', toggleSignIn, false);
     document.getElementById('registrarse').addEventListener('click', handleSignUp, false);
+    document.getElementById('recuperar-contraseña').addEventListener('click', sendPasswordReset);
   }
 
   window.onload = function() {
